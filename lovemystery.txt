@@ -1,0 +1,55 @@
+<?php
+function combination($int,$no,$sum){
+    global $sumCount,$numbers;
+    echo $numbers[$no]." ".$sum."\n";
+    if ($sum==$int){
+        $sumCount++;
+        echo "here\n";
+        return true;
+    }
+    if ($sum>$int) {
+        return true;
+    }
+    for ($i=$no; $i >= 0; $i--) {
+        $nextPrimeNo = $numbers[$i];
+        //echo "loop  $nextPrimeNo  $sum \n";
+        if (!combination($int,$i,$sum+$nextPrimeNo)) {
+            break;
+        }
+    }
+    return true;
+}
+
+function primaNumber($n){
+  static $prime;
+  for($i=count($prime);$i<=$n;$i++){  
+          $counter = 0; 
+          for($j=1;$j<=$i;$j++){ 
+                if($i % $j==0){ 
+                      $counter++;
+                }
+          }
+        if($counter==2){
+               $prime[]=$i;
+        }
+    }
+    $primelist = [];
+    $i=0;
+    while (isset($prime[$i]) && $prime[$i] <= $n){
+        $primelist[] = $prime[$i];
+        $i++;
+     }
+    return $primelist;
+}
+$handle = fopen("php://stdin", "r");
+$testcs = (int)fgets($handle);
+$sumCount = 0;
+$no = (int)fgets($handle);
+for($i=0; $i<$testcs;$i++) {
+    $sumCount = 0;
+    $no = (int)fgets($handle);
+    $numbers = primaNumber($no);
+    combination($no,count($numbers)-1,0,0);
+    echo $sumCount."\n";break;
+}
+?>

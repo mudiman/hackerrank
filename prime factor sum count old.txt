@@ -1,0 +1,55 @@
+<?php
+function combination($int,$no,$sum){
+    global $sumCount,$numbers;
+    if ($sum==$int){
+        $sumCount++;
+        return true;
+    } else if ($sum>$int) {
+        return true;
+    }
+    for ($i=$no; $i >= 0; $i--) {
+        $nextPrimeNo = $numbers[$i];
+        if (!combination($int,$i,$sum+$nextPrimeNo))
+            break;
+    }
+    return true;
+}
+
+function getSubSetPrimes($prime,$n) {
+    $primelist = [];
+    $i=0;
+    while (isset($prime[$i]) && $prime[$i] <= $n) {
+        $primelist[] = $prime[$i];
+        $i++;
+     }
+    return $primelist;
+}
+$handle = fopen("php://stdin", "r");
+$testcs = (int)fgets($handle);
+$sumCount = 0;
+$testcases = [];
+for($i=0; $i<$testcs;$i++) {
+    $testcases[]= (int)fgets($handle);
+}
+$primes = [];
+$primeNo = 2;
+$maxTestCase = max($testcases);
+while ($primeNo < $maxTestCase) {
+    $primes[]= $primeNo;
+    $prime1 = gmp_nextprime ( $primeNo );
+    $primeNo= gmp_strval($prime1);
+}
+
+$results = [];
+foreach($testcases as $no) {
+    if (isset($results[$no])) {
+        echo $results[$no]."\n";
+        continue;
+    }
+    $sumCount = 0;
+    $numbers = getSubSetPrimes($primes,$no);
+    combination($no,count($numbers)-1,0,0);
+    $results[$no] = $sumCount;
+    echo $sumCount."\n";
+}
+?>

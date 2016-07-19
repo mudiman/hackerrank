@@ -1,0 +1,62 @@
+https://www.hackerrank.com/contests/projecteuler/challenges/euler077
+
+<?php
+function combination($int,$no,$sum){
+    global $sumCount,$numbers;
+    //echo $numbers[$no]." ".$sum."\n";
+    if ($sum==$int){
+        $sumCount++;
+        //echo "here\n";
+        return true;
+    } else if ($sum>$int) {
+        return true;
+    }
+    for ($i=$no; $i >= 0; $i--) {
+        $nextPrimeNo = $numbers[$i];
+        //echo "loop  $nextPrimeNo  $sum \n";
+        if (!combination($int,$i,$sum+$nextPrimeNo))
+            break;
+    }
+    return true;
+}
+
+function primaNumber($n){
+  $prime=[];
+  for($i=0;$i<=$n;$i++){  
+          $counter = 0; 
+          for($j=1;$j<=$i;$j++){ 
+                if($i % $j==0){ 
+                      $counter++;
+                }
+          }
+        if($counter==2){
+               $prime[]=$i;
+        }
+    }
+    return $prime;
+}
+
+function getSubSetPrimes($prime,$n) {
+    $primelist = [];
+    $i=0;
+    while (isset($prime[$i]) && $prime[$i] <= $n) {
+        $primelist[] = $prime[$i];
+        $i++;
+     }
+    return $primelist;
+}
+$handle = fopen("php://stdin", "r");
+$testcs = (int)fgets($handle);
+$sumCount = 0;
+$testcases = [];
+for($i=0; $i<$testcs;$i++) {
+    $testcases[]= (int)fgets($handle);
+}
+$primes=primaNumber(max($testcases));
+foreach($testcases as $no) {
+    $sumCount = 0;
+    $numbers = getSubSetPrimes($primes,$no);
+    combination($no,count($numbers)-1,0,0);
+    echo $sumCount."\n";
+}
+?>
